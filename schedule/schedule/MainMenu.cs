@@ -25,7 +25,7 @@ namespace schedule
             Console.Write("\n\t\t\t\t\t\t\t\t\t\t\t");
             menuNumber = Console.ReadLine();
 
-            if (menuNumber.Equals("0")) return false;
+            if (menuNumber.Equals("0")) return false; // 끝내야해서 false
             else if (menuNumber.Equals("1"))
             {
                 return true;
@@ -61,7 +61,6 @@ namespace schedule
                 Thread.Sleep(1000);
                 return true;
             }
-            return false;
         }
     }
 }

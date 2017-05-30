@@ -20,7 +20,6 @@ namespace Sandbox
             findLecture.initExcel(); // 엑셀을 열고 사용할 준비 단계
 
             MainMenu mainMenu = new MainMenu();
-
             while (mainMenu.ShowMenu()) ;
 
             //findLecture.searchLecture("컴퓨터공학과");
