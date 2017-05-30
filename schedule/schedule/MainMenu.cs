@@ -41,6 +41,7 @@ namespace schedule
             }
             else if (menuNumber.Equals("2"))// 강의 추가
             {
+                findLecture.AddLecture();
                 return true;
             }
             else if (menuNumber.Equals("3"))// 강의 삭제

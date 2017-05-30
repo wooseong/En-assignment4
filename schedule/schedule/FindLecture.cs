@@ -19,11 +19,14 @@ namespace schedule
         Excel.Range excelRange;
         int rowCount; // 시간표 행 개수
         int colCount; // 시간표 열 개수
-        private string searchWithNumberString; // searchLectureWith의 메뉴 번호 선택 변수
-        private int searchWithNumber; // searchLectureWith의 메뉴 번호에 따른 엑셀 열 번호
-        private string searchWitinformation; //  searchLectureWith의 새부 검색 내용 변수
+        private string searchWithNumberString; // SearchLecturePrintWith의 메뉴 번호 선택 변수
+        private int searchWithNumber; // SearchLecturePrintWith의 메뉴 번호에 따른 엑셀 열 번호
+        private string searchWitinformation; //  SearchLecturePrintWith의 새부 검색 내용 변수
         private int check; //새부 검색 내용이 출력 되었는지 확인
+        private string subjectNumber;
+        private string subjectclass;
 
+        List<string> selectLecture = new List<string>(new string[] { "",});
         List<string> searchWithList = new List<string>(new string[]
         {"뒤로가기",
         "개설학과전공",
@@ -66,7 +69,7 @@ namespace schedule
             Marshal.ReleaseComObject(excelApplication);
         }
 
-        public void SearchLectureWith()
+        public bool SearchLectureWith()
         {
             do
             {
@@ -80,10 +83,12 @@ namespace schedule
             } while (!(searchWithNumberString.Equals("1") || searchWithNumberString.Equals("2") || searchWithNumberString.Equals("3") ||
               searchWithNumberString.Equals("4") || searchWithNumberString.Equals("5") || searchWithNumberString.Equals("6") ||
               searchWithNumberString.Equals("7") || searchWithNumberString.Equals("8") || searchWithNumberString.Equals("9") || searchWithNumberString.Equals("0")));
+            if (searchWithNumberString.Equals("0")) return false;// 무한루프 나가기
 
             check = -1; // do while문이 처음인지 위해 -1로 마음대로 의미지정
             do
-            {if (check != -1)
+            {
+                if (check != -1)
                 {
                     Console.Clear();
                     Console.WriteLine("--------------------------------------------------------------------------------강의 출력--------------------------------------------------------------------------------");
@@ -96,55 +101,57 @@ namespace schedule
                 searchWitinformation = Console.ReadLine();
                 check = 0;
 
-                if (searchWithNumberString.Equals("0")) { check = -1; }// 무한루프 나가기 위한 값, 값은 무의미
-                else if (searchWithNumberString.Equals("1"))// 개설학과
+                #region 메뉴 조건문
+                if (searchWithNumberString.Equals("1"))// 개설학과
                 {
                     searchWithNumber = 2;
-                    SearchLecture();
+                    SearchLecturePrint();
                 }
                 else if (searchWithNumberString.Equals("2"))// 교과목명
                 {
                     searchWithNumber = 5;
-                    SearchLecture();
+                    SearchLecturePrint();
                 }
                 else if (searchWithNumberString.Equals("3"))// 이수 구분
                 {
                     searchWithNumber = 6;
-                    SearchLecture();
+                    SearchLecturePrint();
                 }
                 else if (searchWithNumberString.Equals("4"))// 학년
                 {
                     searchWithNumber = 7;
-                    SearchLecture();
+                    SearchLecturePrint();
                 }
                 else if (searchWithNumberString.Equals("5"))// 학점
                 {
                     searchWithNumber = 8;
-                    SearchLecture();
+                    SearchLecturePrint();
                 }
                 else if (searchWithNumberString.Equals("6"))// 요일 및 시간
                 {
                     searchWithNumber = 9;
-                    SearchLecture();
+                    SearchLecturePrint();
                 }
                 else if (searchWithNumberString.Equals("7"))// 교수명
                 {
                     searchWithNumber = 11;
-                    SearchLecture();
+                    SearchLecturePrint();
                 }
                 else if (searchWithNumberString.Equals("8"))// 강의언어
                 {
                     searchWithNumber = 12;
-                    SearchLecture();
+                    SearchLecturePrint();
                 }
                 else if (searchWithNumberString.Equals("9"))// 전체
                 {
                     searchWithNumber = 0;
-                    SearchLecture();
+                    SearchLecturePrint();
                 }
+                #endregion
             } while (check == 0);
+            return true; // 무의미한 리턴
         }
-        public void SearchLecture()
+        public void SearchLecturePrint()
         {
             for (int i = 1; i <= rowCount; i++)
             {
@@ -164,6 +171,44 @@ namespace schedule
             }
             if (check != 0)
                 Console.ReadLine();
+        }
+        public bool AddLecture()
+        {
+            do
+            {
+                Console.Clear();
+                Console.Write("\t수강 신청하실 과목의 학수번호와 분반 입력하세요.  \n\t학수 번호  :  ");
+                subjectNumber = Console.ReadLine();
+                Console.Write("\t분      반  :  ");
+                subjectclass = Console.ReadLine();
+                check = 0;
+                for (int i = 1; i <= rowCount; i++)
+                {
+
+                    if ((excelRange.Cells[i, 3].Value2.ToString() == subjectNumber) && (excelRange.Cells[i, 4].Value2.ToString() == subjectclass))
+                    {
+                        for(int j = 1; j < colCount; j++)
+                        {
+                            selectLecture.Add(excelRange.Cells[i, j].Value2.ToString());
+
+                        }
+                        
+                    }
+                }
+                for (int j = 0; j < colCount; j++)
+                {
+                    Console.Write("{0}",  selectLecture[j]);
+
+                }
+                Console.WriteLine(selectLecture);
+                if (check == 0)
+                {
+                    Console.Write("그런 수업은 없습니다.");
+                    Thread.Sleep(1000);
+                }
+            } while (check==0);
+
+            return true;
         }
     }
 }
