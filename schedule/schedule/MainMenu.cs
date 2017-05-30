@@ -10,6 +10,7 @@ namespace schedule
     class MainMenu
     {
         FindLecture findLecture = new FindLecture(@"C:\Users\신우성\Desktop\excelStudy.xlsx"); // 엑셀 파일 위치
+        TimeSheet sheet = new TimeSheet();
         private string menuNumber;
 
         public bool ShowMenu()
@@ -41,11 +42,12 @@ namespace schedule
             }
             else if (menuNumber.Equals("2"))// 강의 추가
             {
-                findLecture.AddLecture();
+              sheet.AddTimeSheet(findLecture.AddLecture());
                 return true;
             }
             else if (menuNumber.Equals("3"))// 강의 삭제
             {
+
                 return true;
             }
             else if (menuNumber.Equals("4"))// 관심 과목 출력
@@ -62,6 +64,8 @@ namespace schedule
             }
             else if (menuNumber.Equals("7"))// 시간표 출력
             {
+                sheet.printTimeSheet();
+                Console.ReadLine();
                 return true;
             }
             else

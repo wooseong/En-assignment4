@@ -172,14 +172,14 @@ namespace schedule
             if (check != 0)
                 Console.ReadLine();
         }
-        public bool AddLecture()
+        public List<string> AddLecture()
         {
             do
             {
                 Console.Clear();
                 Console.Write("\t수강 신청하실 과목의 학수번호와 분반 입력하세요.  \n\t학수 번호  :  ");
                 subjectNumber = Console.ReadLine();
-                Console.Write("\t분      반  :  ");
+                Console.Write("\t분     반  :  ");
                 subjectclass = Console.ReadLine();
                 check = 0;
                 for (int i = 1; i <= rowCount; i++)
@@ -187,28 +187,74 @@ namespace schedule
 
                     if ((excelRange.Cells[i, 3].Value2.ToString() == subjectNumber) && (excelRange.Cells[i, 4].Value2.ToString() == subjectclass))
                     {
+                        check++;
                         for(int j = 1; j < colCount; j++)
                         {
                             selectLecture.Add(excelRange.Cells[i, j].Value2.ToString());
 
                         }
-                        
+                        Console.Write("정상적으로 추가되셨습니다.");
+                        Console.ReadLine();
+
                     }
                 }
-                for (int j = 0; j < colCount; j++)
-                {
-                    Console.Write("{0}",  selectLecture[j]);
-
-                }
-                Console.WriteLine(selectLecture);
                 if (check == 0)
                 {
                     Console.Write("그런 수업은 없습니다.");
                     Thread.Sleep(1000);
                 }
-            } while (check==0);
+                //else
+                //{
+                //    for (int j = 0; j < colCount; j++)
+                //    {
+                //        Console.Write("{0,10}", selectLecture[j]);
 
-            return true;
+                //    }
+                //   // Console.WriteLine(selectLecture);
+                //    Console.ReadLine();
+                //}
+            } while (check==0);
+            return selectLecture;
+        }
+        public void ErasureLecture()
+        {
+                Console.Clear();
+                Console.Write("\t 삭제하실 과목의 학수번호와 분반 입력하세요.  \n\t학수 번호  :  ");
+                subjectNumber = Console.ReadLine();
+                Console.Write("\t분     반  :  ");
+                subjectclass = Console.ReadLine();
+                check = 1;
+                for (int i = 1; i <= rowCount; i++)
+                {
+
+                    if ((excelRange.Cells[i, 3].Value2.ToString() == subjectNumber) && (excelRange.Cells[i, 4].Value2.ToString() == subjectclass))
+                    {
+                        check++;
+                        for (int j = 1; j < colCount; j++)
+                        {
+                            selectLecture.Remove(excelRange.Cells[i, j].Value2.ToString());
+
+                        }
+                        Console.Write("정상적으로 삭제되었습니다.");
+                        Console.ReadLine();
+
+                    }
+                }
+                if (check == 0)
+                {
+                    Console.Write("그런 수업은 없습니다.");
+                    Thread.Sleep(1000);
+                }
+            else
+            {
+                for (int j = 0; j < colCount; j++)
+                {
+                    Console.Write("{0,10}", selectLecture[j]);
+
+                }
+                // Console.WriteLine(selectLecture);
+                Console.ReadLine();
+            }
         }
     }
 }
