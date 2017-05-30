@@ -1,1 +1,7 @@
 C:\Users\신우성\Documents\세종대\En#\과제4\schedule\schedule\obj\Debug\schedule.csprojResolveAssemblyReference.cache
+C:\Users\신우성\Documents\세종대\En#\과제4\schedule\schedule\bin\Debug\schedule.exe.config
+C:\Users\신우성\Documents\세종대\En#\과제4\schedule\schedule\bin\Debug\schedule.exe
+C:\Users\신우성\Documents\세종대\En#\과제4\schedule\schedule\bin\Debug\schedule.pdb
+C:\Users\신우성\Documents\세종대\En#\과제4\schedule\schedule\obj\Debug\schedule.csproj.ResolveComReference.cache
+C:\Users\신우성\Documents\세종대\En#\과제4\schedule\schedule\obj\Debug\schedule.exe
+C:\Users\신우성\Documents\세종대\En#\과제4\schedule\schedule\obj\Debug\schedule.pdb

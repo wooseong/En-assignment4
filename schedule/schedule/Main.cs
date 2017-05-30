@@ -19,9 +19,12 @@ namespace Sandbox
             FindLecture findLecture = new FindLecture(@"C:\Users\신우성\Desktop\excelStudy.xlsx"); // 엑셀 파일 위치
             findLecture.initExcel(); // 엑셀을 열고 사용할 준비 단계
 
-            findLecture.searchLecture("컴퓨터공학과");
+            MainMenu mainMenu = new MainMenu();
 
-            findLecture.searchLecture("디지털공학과");
+            while (mainMenu.ShowMenu()) ;
+
+            //findLecture.searchLecture("컴퓨터공학과");
+            //findLecture.searchLecture("디지털공학과");
 
 
 
