@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "schedule", "schedule\schedule.csproj", "{23C6CC8C-71A7-4E86-97E4-4467A730B444}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "schedule", "schedule\schedule.csproj", "{9A3171BF-47A4-4C31-8E00-6A4454B2D2E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{23C6CC8C-71A7-4E86-97E4-4467A730B444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23C6CC8C-71A7-4E86-97E4-4467A730B444}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23C6CC8C-71A7-4E86-97E4-4467A730B444}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23C6CC8C-71A7-4E86-97E4-4467A730B444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A3171BF-47A4-4C31-8E00-6A4454B2D2E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A3171BF-47A4-4C31-8E00-6A4454B2D2E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A3171BF-47A4-4C31-8E00-6A4454B2D2E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A3171BF-47A4-4C31-8E00-6A4454B2D2E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
