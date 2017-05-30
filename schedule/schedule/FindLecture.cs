@@ -68,7 +68,7 @@ namespace schedule
 
         public void SearchLectureWith()
         {
-          do
+            do
             {
                 Console.Clear();
                 Console.WriteLine("--------------------------------------------------------------------------------강의 출력--------------------------------------------------------------------------------");
@@ -78,14 +78,23 @@ namespace schedule
                 Console.Write("\t\t\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  ");
                 searchWithNumberString = Console.ReadLine();
             } while (!(searchWithNumberString.Equals("1") || searchWithNumberString.Equals("2") || searchWithNumberString.Equals("3") ||
-            searchWithNumberString.Equals("4") || searchWithNumberString.Equals("5") || searchWithNumberString.Equals("6") ||
-            searchWithNumberString.Equals("7") || searchWithNumberString.Equals("8") || searchWithNumberString.Equals("9") || searchWithNumberString.Equals("0")));
+              searchWithNumberString.Equals("4") || searchWithNumberString.Equals("5") || searchWithNumberString.Equals("6") ||
+              searchWithNumberString.Equals("7") || searchWithNumberString.Equals("8") || searchWithNumberString.Equals("9") || searchWithNumberString.Equals("0")));
 
-            check = 0;
-            while (check == 0)
-            {
+            check = -1; // do while문이 처음인지 위해 -1로 마음대로 의미지정
+            do
+            {if (check != -1)
+                {
+                    Console.Clear();
+                    Console.WriteLine("--------------------------------------------------------------------------------강의 출력--------------------------------------------------------------------------------");
+                    Console.WriteLine("\n\n\n\n\n");
+                    for (int i = 0; i < 10; i++)
+                        Console.WriteLine("\t\t\t\t\t\t\t\t\t\t{0}. {1}", i, searchWithList[i]);
+                    Console.WriteLine("\t\t\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  {0}", searchWithNumberString);
+                }
                 Console.Write("\t\t\t\t\t\t\t\t\t\t{0}  ", searchWithList[Convert.ToInt32(searchWithNumberString)]);
                 searchWitinformation = Console.ReadLine();
+                check = 0;
 
                 if (searchWithNumberString.Equals("0")) { check = -1; }// 무한루프 나가기 위한 값, 값은 무의미
                 else if (searchWithNumberString.Equals("1"))// 개설학과
@@ -133,7 +142,7 @@ namespace schedule
                     searchWithNumber = 0;
                     SearchLecture();
                 }
-            }
+            } while (check == 0);
         }
         public void SearchLecture()
         {
@@ -147,14 +156,14 @@ namespace schedule
                 {
                     if (excelRange.Cells[i, j] != null && excelRange.Cells[i, j].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
                         Console.Write(excelRange.Cells[i, j].Value2.ToString() + "\t ");
-
+                    check++;
 
                 }
-                check++;
                 Console.WriteLine("\r");
 
             }
-            Console.ReadLine();
+            if (check != 0)
+                Console.ReadLine();
         }
     }
 }
