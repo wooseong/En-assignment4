@@ -171,7 +171,7 @@ namespace schedule
                     check++;
 
                 }
-                Console.WriteLine("");
+                Console.WriteLine("\n");
 
             }
             if (check != 0)
