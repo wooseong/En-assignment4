@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace schedule
 {
-    public class FindLecture
+    public class Lecture
     {
         #region 변수선언
         Excel.Application excelApplication;
@@ -26,7 +26,8 @@ namespace schedule
         private string subjectNumber;
         private string subjectclass;
 
-        List<string> selectLecture = new List<string>(new string[] { "",});
+        List<string> selectLecture = new List<string>(new string[] { "", }); //
+        List<string> selectIntrestLecture = new List<string>(new string[] { "", });
         List<string> searchWithList = new List<string>(new string[]
         {"뒤로가기",
         "개설학과전공",
@@ -41,7 +42,7 @@ namespace schedule
         });
         #endregion
 
-        public FindLecture(string directory)// 엑셀 불러오고 각 변수에 초기화
+        public Lecture(string directory)// 엑셀 불러오고 각 변수에 초기화
         {
             excelApplication = new Excel.Application(); // Excel 첫번째 워크시트 가져오기
             excelWorkbook = excelApplication.Workbooks.Open(directory);
@@ -51,7 +52,7 @@ namespace schedule
             rowCount = excelRange.Rows.Count;
             colCount = excelRange.Columns.Count;
         }
-        ~FindLecture()
+        ~Lecture()
         {
 
             GC.Collect();
@@ -69,37 +70,40 @@ namespace schedule
             Marshal.ReleaseComObject(excelApplication);
         }
 
-        public bool SearchLectureWith()
+        public bool SearchLectureWith() // 강의 출력을 위한 세부사항 설정
         {
-            do
+            do// 어떤 세부 목록으로 검색할지 번호 선택
             {
                 Console.Clear();
-                Console.WriteLine("--------------------------------------------------------------------------------강의 출력--------------------------------------------------------------------------------");
-                Console.WriteLine("\n\n\n\n\n");
+                Console.WriteLine("\n\n-------------------------------------------------------------------강의 출력-------------------------------------------------------------------");
+                Console.WriteLine("\n\n\n");
                 for (int i = 0; i < 10; i++)
-                    Console.WriteLine("\t\t\t\t\t\t\t\t\t\t{0}. {1}", i, searchWithList[i]);
-                Console.Write("\t\t\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  ");
+                    Console.WriteLine("\t\t\t\t\t\t\t\t{0}. {1}", i, searchWithList[i]);
+                Console.Write("\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  ");
                 searchWithNumberString = Console.ReadLine();
             } while (!(searchWithNumberString.Equals("1") || searchWithNumberString.Equals("2") || searchWithNumberString.Equals("3") ||
               searchWithNumberString.Equals("4") || searchWithNumberString.Equals("5") || searchWithNumberString.Equals("6") ||
-              searchWithNumberString.Equals("7") || searchWithNumberString.Equals("8") || searchWithNumberString.Equals("9") || searchWithNumberString.Equals("0")));
-            if (searchWithNumberString.Equals("0")) return false;// 무한루프 나가기
+              searchWithNumberString.Equals("7") || searchWithNumberString.Equals("8") || searchWithNumberString.Equals("9") || searchWithNumberString.Equals("0")));// 어떤 세부 목록으로 검색할지 번호 선택
+            if (searchWithNumberString.Equals("0")) return false;// 0입력시, 무한루프 나가기(뒤로가기)
 
             check = -1; // do while문이 처음인지 위해 -1로 마음대로 의미지정
             do
             {
-                if (check != -1)
+                #region // 어떤 세부 목록으로 검색할지 내용 입력
+                if (check != -1) // 첫 do while이 아닌 경우(0~9이외의 값을 입력시) 메뉴를 다시 출력해야하므로
                 {
                     Console.Clear();
                     Console.WriteLine("--------------------------------------------------------------------------------강의 출력--------------------------------------------------------------------------------");
                     Console.WriteLine("\n\n\n\n\n");
                     for (int i = 0; i < 10; i++)
-                        Console.WriteLine("\t\t\t\t\t\t\t\t\t\t{0}. {1}", i, searchWithList[i]);
-                    Console.WriteLine("\t\t\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  {0}", searchWithNumberString);
-                }
-                Console.Write("\t\t\t\t\t\t\t\t\t\t{0}  ", searchWithList[Convert.ToInt32(searchWithNumberString)]);
+                        Console.WriteLine("\t\t\t\t\t\t\t\t{0}. {1}", i, searchWithList[i]);
+                    Console.WriteLine("\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  {0}", searchWithNumberString);
+                }// 첫 do while이 아닌 경우(0~9이외의 값을 입력시) 메뉴를 다시 출력해야하므로
+                Console.Write("\t\t\t\t\t\t\t\t{0}  ", searchWithList[Convert.ToInt32(searchWithNumberString)]);
                 searchWitinformation = Console.ReadLine();
-                check = 0;
+                if (searchWitinformation.Equals("0")) return false;// 0입력시, 무한루프 나가기(뒤로가기)
+                check = 0; // 출력된 강의가 몇개인지 count하기 위해 초기화
+                #endregion
 
                 #region 메뉴 조건문
                 if (searchWithNumberString.Equals("1"))// 개설학과
@@ -139,6 +143,7 @@ namespace schedule
                 }
                 else if (searchWithNumberString.Equals("8"))// 강의언어
                 {
+                     
                     searchWithNumber = 12;
                     SearchLecturePrint();
                 }
@@ -166,13 +171,13 @@ namespace schedule
                     check++;
 
                 }
-                Console.WriteLine("\r");
+                Console.WriteLine("");
 
             }
             if (check != 0)
                 Console.ReadLine();
         }
-        public List<string> AddLecture()
+        public List<string> AddLecture(int menuNumber)
         {
             do
             {
@@ -188,10 +193,12 @@ namespace schedule
                     if ((excelRange.Cells[i, 3].Value2.ToString() == subjectNumber) && (excelRange.Cells[i, 4].Value2.ToString() == subjectclass))
                     {
                         check++;
-                        for(int j = 1; j < colCount; j++)
+                        for (int j = 1; j < colCount; j++)
                         {
-                            selectLecture.Add(excelRange.Cells[i, j].Value2.ToString());
-
+                            if (menuNumber == 2)
+                                selectLecture.Add(excelRange.Cells[i, j].Value2.ToString());
+                            else if (menuNumber == 5)
+                                selectIntrestLecture.Add(excelRange.Cells[i, j].Value2.ToString());
                         }
                         Console.Write("정상적으로 추가되셨습니다.");
                         Console.ReadLine();
@@ -213,38 +220,41 @@ namespace schedule
                 //   // Console.WriteLine(selectLecture);
                 //    Console.ReadLine();
                 //}
-            } while (check==0);
+            } while (check == 0);
             return selectLecture;
         }
-        public void ErasureLecture()
+        public void ErasureLecture(int menuNumber)
         {
-                Console.Clear();
-                Console.Write("\t 삭제하실 과목의 학수번호와 분반 입력하세요.  \n\t학수 번호  :  ");
-                subjectNumber = Console.ReadLine();
-                Console.Write("\t분     반  :  ");
-                subjectclass = Console.ReadLine();
-                check = 1;
-                for (int i = 1; i <= rowCount; i++)
+            Console.Clear();
+            Console.Write("\t 삭제하실 과목의 학수번호와 분반 입력하세요.  \n\t학수 번호  :  ");
+            subjectNumber = Console.ReadLine();
+            Console.Write("\t분     반  :  ");
+            subjectclass = Console.ReadLine();
+            check = 1;
+            for (int i = 1; i <= rowCount; i++)
+            {
+
+                if ((excelRange.Cells[i, 3].Value2.ToString() == subjectNumber) && (excelRange.Cells[i, 4].Value2.ToString() == subjectclass))
                 {
-
-                    if ((excelRange.Cells[i, 3].Value2.ToString() == subjectNumber) && (excelRange.Cells[i, 4].Value2.ToString() == subjectclass))
+                    check++;
+                    for (int j = 1; j < colCount; j++)
                     {
-                        check++;
-                        for (int j = 1; j < colCount; j++)
-                        {
+                        if (menuNumber == 2)
                             selectLecture.Remove(excelRange.Cells[i, j].Value2.ToString());
-
-                        }
-                        Console.Write("정상적으로 삭제되었습니다.");
-                        Console.ReadLine();
+                        else if (menuNumber == 5)
+                            selectIntrestLecture.Remove(excelRange.Cells[i, j].Value2.ToString());
 
                     }
+                    Console.Write("정상적으로 삭제되었습니다.");
+                    Console.ReadLine();
+
                 }
-                if (check == 0)
-                {
-                    Console.Write("그런 수업은 없습니다.");
-                    Thread.Sleep(1000);
-                }
+            }
+            if (check == 0)
+            {
+                Console.Write("그런 수업은 없습니다.");
+                Thread.Sleep(1000);
+            }
             else
             {
                 for (int j = 0; j < colCount; j++)

@@ -14,7 +14,7 @@ namespace Sandbox
     {
         public static void Main()
         {
-            Console.SetWindowSize(180, 50); // 콘솔 창 사이즈 설정
+            Console.SetWindowSize(140, 40); // 콘솔 창 사이즈 설정
             MainMenu mainMenu = new MainMenu();
 
             while (mainMenu.ShowMenu()) ;
