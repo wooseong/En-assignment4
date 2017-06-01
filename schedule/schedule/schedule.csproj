@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lecture.cs" />
+    <Compile Include="LectureVO.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

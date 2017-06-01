@@ -17,17 +17,17 @@ namespace schedule
         {
             #region 메뉴 출력문
             Console.Clear();
-            Console.WriteLine("\n\n-------------------------------------------------------------------Main Menu-------------------------------------------------------------------");
+            Console.WriteLine("\n\n-----------------------------------------------------------------------------------------Main Menu-----------------------------------------------------------------------------------------");
             Console.WriteLine("\n\n\n");
-            Console.WriteLine("\t\t\t\t\t\t\t\t 1.강의 출력"); // 엑셀 -> 콜솔로 출력
-            Console.WriteLine("\t\t\t\t\t\t\t\t 2.수강 신청"); // 엑셀에 추가
-            Console.WriteLine("\t\t\t\t\t\t\t\t 3.수강 철회");
-            Console.WriteLine("\t\t\t\t\t\t\t\t 4.관심 과목 출력");
-            Console.WriteLine("\t\t\t\t\t\t\t\t 5.관심 과목 추가");
-            Console.WriteLine("\t\t\t\t\t\t\t\t 6.관심 과목 삭제");
-            Console.WriteLine("\t\t\t\t\t\t\t\t 7.시간표 출력"); // 콘솔 -> 엑셀로
-            Console.WriteLine("\t\t\t\t\t\t\t\t 0. exit");
-            Console.Write("\n\t\t\t\t\t\t\t\t\t");
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 1.강의 출력"); // 엑셀 -> 콜솔로 출력
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 2.수강 신청"); // 엑셀에 추가
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 3.수강 철회");
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 4.관심 과목 출력");
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 5.관심 과목 추가");
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 6.관심 과목 삭제");
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 7.시간표 출력"); // 콘솔 -> 엑셀로
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 0. exit");
+            Console.Write("\n\t\t\t\t\t\t\t\t\t\t\t\t");
             #endregion
             menuNumber = Console.ReadLine();
 
@@ -70,8 +70,8 @@ namespace schedule
             }
             else
             {
-                Console.WriteLine("\t\t\t\t\t\t\t\t잘못입력하셨습니다.");
-                Console.Write("\t\t\t\t\t\t\t\t 다시 입력하세요.");
+                Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t잘못입력하셨습니다.");
+                Console.Write("\t\t\t\t\t\t\t\t\t\t\t 다시 입력하세요.");
                 Thread.Sleep(1000);
                 return true;
             }

@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Threading;
-
+using System.IO;
+using System.Threading.Tasks;
 
 namespace schedule
 {
@@ -23,6 +24,8 @@ namespace schedule
         private int searchWithNumber; // SearchLecturePrintWith의 메뉴 번호에 따른 엑셀 열 번호
         private string searchWitinformation; //  SearchLecturePrintWith의 새부 검색 내용 변수
         private int check; //새부 검색 내용이 출력 되었는지 확인
+        List<LectureVO> lecture = new List<LectureVO>();
+
         private string subjectNumber;
         private string subjectclass;
 
@@ -70,21 +73,56 @@ namespace schedule
             Marshal.ReleaseComObject(excelApplication);
         }
 
+        public void LectureSet()
+        {
+            for (int i = 2; i <= rowCount; i++)
+            {
+                if ((excelRange.Cells[i, 1] != null && excelRange.Cells[i, 1].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
+                    && (excelRange.Cells[i, 2] != null && excelRange.Cells[i, 2].Value2 != null)
+                    && (excelRange.Cells[i, 3] != null && excelRange.Cells[i, 3].Value2 != null)
+                    && (excelRange.Cells[i, 4] != null && excelRange.Cells[i, 4].Value2 != null)
+                    && (excelRange.Cells[i, 5] != null && excelRange.Cells[i, 5].Value2 != null)
+                    && (excelRange.Cells[i, 6] != null && excelRange.Cells[i, 6].Value2 != null)
+                    && (excelRange.Cells[i, 7] != null && excelRange.Cells[i, 7].Value2 != null)
+                    && (excelRange.Cells[i, 8] != null && excelRange.Cells[i, 8].Value2 != null)
+                    && (excelRange.Cells[i, 9] != null && excelRange.Cells[i, 9].Value2 != null)
+                    && (excelRange.Cells[i, 10] != null && excelRange.Cells[i, 10].Value2 != null)
+                    && (excelRange.Cells[i, 11] != null && excelRange.Cells[i, 11].Value2 != null))
+                    //Console.Write("{0,-20}", excelRange.Cells[i, 11].Value2.ToString());
+
+                    /*public LectureVO(int number, string department, string lectureNumber,
+                    string lectureClassNumber, string lectureName, string completeDivision,
+                    int grade, double credit, string[] dateTime, string[] lectureRoom,
+                    string professorName, string lectureLanguage)*/
+                    Console.WriteLine("{0},{1},{2}",Int32.Parse(excelRange.Cells[i, 1].Value2.ToString()), excelRange.Cells[i, 1].Convert.ToInt32(), excelRange.Cells[i, 1].Value2.Convert.ToInt32());
+                Console.ReadLine();
+                    /*lecture.Add(new LectureVO(excelRange.Cells[i, 1].Value2.ToInt32()));/* excelRange.Cells[i, 2].Value2.ToString(), excelRange.Cells[i, 3].Value2.ToString(),
+                         excelRange.Cells[i, 4].Value2.ToString(), excelRange.Cells[i, 5].Value2.ToString(), excelRange.Cells[i, 6].Value2.ToString(),
+                          excelRange.Cells[i, 7].Value2.Int32, excelRange.Cells[i, 8].Value2.Double, excelRange.Cells[i, 9].Value2.ToString(),
+                           excelRange.Cells[i, 10].Value2.ToString(), excelRange.Cells[i, 11].Value2.ToString()) );*/
+            }
+        }
+
         public bool SearchLectureWith() // 강의 출력을 위한 세부사항 설정
         {
             do// 어떤 세부 목록으로 검색할지 번호 선택
             {
                 Console.Clear();
-                Console.WriteLine("\n\n-------------------------------------------------------------------강의 출력-------------------------------------------------------------------");
+                Console.WriteLine("\n\n-----------------------------------------------------------------------------------------강의 출력-----------------------------------------------------------------------------------------");
                 Console.WriteLine("\n\n\n");
                 for (int i = 0; i < 10; i++)
-                    Console.WriteLine("\t\t\t\t\t\t\t\t{0}. {1}", i, searchWithList[i]);
-                Console.Write("\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  ");
+                    Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t{0}. {1}", i, searchWithList[i]);
+                Console.Write("\t\t\t\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  ");
                 searchWithNumberString = Console.ReadLine();
             } while (!(searchWithNumberString.Equals("1") || searchWithNumberString.Equals("2") || searchWithNumberString.Equals("3") ||
               searchWithNumberString.Equals("4") || searchWithNumberString.Equals("5") || searchWithNumberString.Equals("6") ||
               searchWithNumberString.Equals("7") || searchWithNumberString.Equals("8") || searchWithNumberString.Equals("9") || searchWithNumberString.Equals("0")));// 어떤 세부 목록으로 검색할지 번호 선택
             if (searchWithNumberString.Equals("0")) return false;// 0입력시, 무한루프 나가기(뒤로가기)
+            else if (searchWithNumberString.Equals("9"))// 전체
+            {
+                searchWithNumber = 0;
+                SearchLecturePrint();
+            }
 
             check = -1; // do while문이 처음인지 위해 -1로 마음대로 의미지정
             do
@@ -96,10 +134,10 @@ namespace schedule
                     Console.WriteLine("--------------------------------------------------------------------------------강의 출력--------------------------------------------------------------------------------");
                     Console.WriteLine("\n\n\n\n\n");
                     for (int i = 0; i < 10; i++)
-                        Console.WriteLine("\t\t\t\t\t\t\t\t{0}. {1}", i, searchWithList[i]);
-                    Console.WriteLine("\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  {0}", searchWithNumberString);
+                        Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t{0}. {1}", i, searchWithList[i]);
+                    Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t어떤 것을 통해 보시겠습니까?  {0}", searchWithNumberString);
                 }// 첫 do while이 아닌 경우(0~9이외의 값을 입력시) 메뉴를 다시 출력해야하므로
-                Console.Write("\t\t\t\t\t\t\t\t{0}  ", searchWithList[Convert.ToInt32(searchWithNumberString)]);
+                Console.Write("\t\t\t\t\t\t\t\t\t\t\t{0}  ", searchWithList[Convert.ToInt32(searchWithNumberString)]);
                 searchWitinformation = Console.ReadLine();
                 if (searchWitinformation.Equals("0")) return false;// 0입력시, 무한루프 나가기(뒤로가기)
                 check = 0; // 출력된 강의가 몇개인지 count하기 위해 초기화
@@ -143,13 +181,8 @@ namespace schedule
                 }
                 else if (searchWithNumberString.Equals("8"))// 강의언어
                 {
-                     
+
                     searchWithNumber = 12;
-                    SearchLecturePrint();
-                }
-                else if (searchWithNumberString.Equals("9"))// 전체
-                {
-                    searchWithNumber = 0;
                     SearchLecturePrint();
                 }
                 #endregion
@@ -158,20 +191,49 @@ namespace schedule
         }
         public void SearchLecturePrint()
         {
+            LectureSet();
             for (int i = 1; i <= rowCount; i++)
             {
-
-                if (excelRange.Cells[i, searchWithNumber].Value2.ToString() != searchWitinformation)
+                if ((i != 1) && (searchWithNumber != 0) && (excelRange.Cells[i, searchWithNumber].Value2.ToString() != searchWitinformation))
                     continue;
 
-                for (int j = 1; j <= colCount; j++)
-                {
-                    if (excelRange.Cells[i, j] != null && excelRange.Cells[i, j].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
-                        Console.Write(excelRange.Cells[i, j].Value2.ToString() + "\t ");
-                    check++;
+                check++;
 
-                }
-                Console.WriteLine("\n");
+
+
+                if (excelRange.Cells[i, 1] != null && excelRange.Cells[i, 1].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
+                    Console.Write("{0,-5},[{1}]", excelRange.Cells[i, 1].Value2.ToString(), excelRange.Cells[i, 1].Value2.ToString().Length);
+                if (excelRange.Cells[i, 2] != null && excelRange.Cells[i, 2].Value2 != null)
+                    Console.Write("{0,-16},[{1}]", excelRange.Cells[i, 2].Value2.ToString(), excelRange.Cells[i, 2].Value2.ToString().Length);
+                if (excelRange.Cells[i, 3] != null && excelRange.Cells[i, 3].Value2 != null)
+                    Console.Write("{0,-10},[{1}]", excelRange.Cells[i, 3].Value2.ToString(), excelRange.Cells[i, 3].Value2.ToString().Length);
+                if (excelRange.Cells[i, 4] != null && excelRange.Cells[i, 4].Value2 != null)
+                    Console.Write("{0,-5},[{1}]", excelRange.Cells[i, 4].Value2.ToString(), excelRange.Cells[i, 4].Value2.ToString().Length);
+                if (excelRange.Cells[i, 5] != null && excelRange.Cells[i, 5].Value2 != null)
+                    Console.Write("{0,-32}", excelRange.Cells[i, 5].Value2.ToString());
+                if (excelRange.Cells[i, 6] != null && excelRange.Cells[i, 6].Value2 != null)
+                    Console.Write("{0,-10}", excelRange.Cells[i, 6].Value2.ToString());
+                if (excelRange.Cells[i, 7] != null && excelRange.Cells[i, 7].Value2 != null)
+                    Console.Write("{0,-3}", excelRange.Cells[i, 7].Value2.ToString());
+                if (excelRange.Cells[i, 8] != null && excelRange.Cells[i, 8].Value2 != null)
+                    Console.Write("{0,-5}", excelRange.Cells[i, 8].Value2.ToString());
+                if (excelRange.Cells[i, 9] != null && excelRange.Cells[i, 9].Value2 != null)
+                    Console.Write("{0,-20}", excelRange.Cells[i, 9].Value2.ToString());
+                if (excelRange.Cells[i, 10] != null && excelRange.Cells[i, 10].Value2 != null)
+                    Console.Write("{0,-20}", excelRange.Cells[i, 10].Value2.ToString());
+                if (excelRange.Cells[i, 11] != null && excelRange.Cells[i, 11].Value2 != null)
+                    Console.Write("{0,-20}", excelRange.Cells[i, 11].Value2.ToString());
+
+
+                //for (int j = 1; j <= colCount; j++)
+                //{
+                //    if (excelRange.Cells[i, j] != null && excelRange.Cells[i, j].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
+                //        Console.Write("{0,}", excelRange.Cells[i, j].Value2.ToString());
+                //    //Console.Write(excelRange.Cells[i, j].Value2.ToString() + "\t ");
+                //    check++;
+
+                //}
+                Console.WriteLine("\r");
 
             }
             if (check != 0)
