@@ -88,18 +88,16 @@ namespace schedule
                     && (excelRange.Cells[i, 9] != null && excelRange.Cells[i, 9].Value2 != null)
                     && (excelRange.Cells[i, 10] != null && excelRange.Cells[i, 10].Value2 != null)
                     && (excelRange.Cells[i, 11] != null && excelRange.Cells[i, 11].Value2 != null))
-                    //Console.Write("{0,-20}", excelRange.Cells[i, 11].Value2.ToString());
 
                     /*public LectureVO(int number, string department, string lectureNumber,
                     string lectureClassNumber, string lectureName, string completeDivision,
                     int grade, double credit, string[] dateTime, string[] lectureRoom,
                     string professorName, string lectureLanguage)*/
-                    Console.WriteLine("{0},{1},{2}",Int32.Parse(excelRange.Cells[i, 1].Value2.ToString()), excelRange.Cells[i, 1].Convert.ToInt32(), excelRange.Cells[i, 1].Value2.Convert.ToInt32());
-                Console.ReadLine();
-                    /*lecture.Add(new LectureVO(excelRange.Cells[i, 1].Value2.ToInt32()));/* excelRange.Cells[i, 2].Value2.ToString(), excelRange.Cells[i, 3].Value2.ToString(),
+
+                    lecture.Add(new LectureVO(Int32.Parse(excelRange.Cells[i, 1].Value2.ToString()), excelRange.Cells[i, 2].Value2.ToString(), excelRange.Cells[i, 3].Value2.ToString(),
                          excelRange.Cells[i, 4].Value2.ToString(), excelRange.Cells[i, 5].Value2.ToString(), excelRange.Cells[i, 6].Value2.ToString(),
-                          excelRange.Cells[i, 7].Value2.Int32, excelRange.Cells[i, 8].Value2.Double, excelRange.Cells[i, 9].Value2.ToString(),
-                           excelRange.Cells[i, 10].Value2.ToString(), excelRange.Cells[i, 11].Value2.ToString()) );*/
+                          Int32.Parse(excelRange.Cells[i, 7].Value2.ToString()), excelRange.Cells[i, 8].Value2.ToDouble(), excelRange.Cells[i, 9].Value2.ToString(),
+                           excelRange.Cells[i, 10].Value2.ToString(), excelRange.Cells[i, 11].Value2.ToString() ) );
             }
         }
 

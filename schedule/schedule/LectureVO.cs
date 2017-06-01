@@ -21,8 +21,7 @@ namespace schedule
         private string professorName; // 교수명
         private string lectureLanguage;//강의 언어
 
-        public LectureVO(int number)
-        { this.number = number; }/*, string department, string lectureNumber,
+        public LectureVO(int number, string department, string lectureNumber,
             string lectureClassNumber, string lectureName, string completeDivision,
             int grade, double credit, string[] dateTime, string[] lectureRoom,
             string professorName, string lectureLanguage)
@@ -40,7 +39,7 @@ namespace schedule
             this.professorName = professorName;
             this.lectureLanguage = lectureLanguage;
 
-        } // 생성자*/
+        } // 생성자
 
         public int Number
         {
