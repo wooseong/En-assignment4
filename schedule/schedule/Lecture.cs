@@ -287,69 +287,69 @@ namespace schedule
         }
         public void SearchLecturePrint() // 강의 출력
         {
-            for (int i = 0; i < lecture.Count; i++)
+            for (int i = 1; i <= lecture.Count; i++)
             {
-                if ((i != 1) && (searchWithNumber != 0) && (excelRange.Cells[i, searchWithNumber].Value2.ToString() != searchWitinformation))
+                if ((searchWithNumber != 0) && (excelRange.Cells[i, searchWithNumber].Value2.ToString() != searchWitinformation)) //searchWithNumber =0 이면 전체 출력이라 continue 하면 안됨
                     continue;
 
                 check++; // 검색된 강의가 있는지 확인
                 #region 강의출력 출력문
-                if (lecture[i].Number != -1) // 각 행의 NO
-                    Console.Write("{0,-5}", lecture[i].Number);
-                if (lecture[i].Department != null) // 개설학과
-                    Console.Write("{0,-10}\t", lecture[i].Department);
-                if (lecture[i].LectureNumber != null) // 학수번호
-                    Console.Write("{0,-10}", lecture[i].LectureNumber);
-                if (lecture[i].LectureClassNumber != null) // 분반
-                    Console.Write("{0,-5}", lecture[i].LectureClassNumber);
-                if (lecture[i].LectureName != null)// 교과목명
+                if (lecture[i-1].Number != -1) // 각 행의 NO
+                    Console.Write("{0,-5}", lecture[i-1].Number);
+                if (lecture[i-1].Department != null) // 개설학과
+                    Console.Write("{0,-10}\t", lecture[i-1].Department);
+                if (lecture[i-1].LectureNumber != null) // 학수번호
+                    Console.Write("{0,-10}", lecture[i-1].LectureNumber);
+                if (lecture[i-1].LectureClassNumber != null) // 분반
+                    Console.Write("{0,-5}", lecture[i-1].LectureClassNumber);
+                if (lecture[i-1].LectureName != null)// 교과목명
                 {
-                    if (lecture[i].LectureName.Length > 20)
-                        Console.Write("{0,-16}\t\t", lecture[i].LectureName);
+                    if (lecture[i-1].LectureName.Length > 20)
+                        Console.Write("{0,-16}\t\t", lecture[i-1].LectureName);
                     else
-                        Console.Write("{0,-14}\t\t\t", lecture[i].LectureName);
+                        Console.Write("{0,-14}\t\t\t", lecture[i-1].LectureName);
                 }// 교과목명
-                if (lecture[i].CompleteDivision != null) // 이수구분
-                    Console.Write("{0,-8}", lecture[i].CompleteDivision);
-                if (lecture[i].Grade != -1) // 학년
-                    Console.Write("{0,-2}", lecture[i].Grade);
-                if (lecture[i].Credit != -1) // 학점
-                    Console.Write("{0,-2}", lecture[i].Credit);
-                if (lecture[i].Date != null) //요일 및 강의시간
+                if (lecture[i-1].CompleteDivision != null) // 이수구분
+                    Console.Write("{0,-8}", lecture[i-1].CompleteDivision);
+                if (lecture[i-1].Grade != -1) // 학년
+                    Console.Write("{0,-2}", lecture[i-1].Grade);
+                if (lecture[i-1].Credit != -1) // 학점
+                    Console.Write("{0,-2}", lecture[i-1].Credit);
+                if (lecture[i-1].Date != null) //요일 및 강의시간
                 {
-                    if (lecture[i].Date.Length < 14)
+                    if (lecture[i-1].Date.Length < 14)
                     {
-                        Console.Write("{0,-15}\t\t", lecture[i].Date);
+                        Console.Write("{0,-15}\t\t", lecture[i-1].Date);
                     }
                     else
                     {
-                        Console.Write("{0,-15}\t", lecture[i].Date);
+                        Console.Write("{0,-15}\t", lecture[i-1].Date);
                     }
                 } //요일 및 강의시간
-                if (lecture[i].LectureRoom != null) // 강의실
-                    Console.Write("{0,-8}\t", lecture[i].LectureRoom);
+                if (lecture[i-1].LectureRoom != null) // 강의실
+                    Console.Write("{0,-8}\t", lecture[i-1].LectureRoom);
 
-                if (lecture[i].ProfessorName != null)
+                if (lecture[i-1].ProfessorName != null)
                 { // 교수명
-                    if (lecture[i].ProfessorName.Length < 1)
+                    if (lecture[i-1].ProfessorName.Length < 1)
                     {
-                        Console.Write("{0,-18}\t", lecture[i].ProfessorName);
+                        Console.Write("{0,-13}\t", lecture[i-1].ProfessorName);
                     }
-                    else if (lecture[i].ProfessorName.Length < 3)
+                    else if (lecture[i-1].ProfessorName.Length < 3)
                     {
-                        Console.Write("{0,-16}\t", lecture[i].ProfessorName);
+                        Console.Write("{0,-14}\t", lecture[i-1].ProfessorName);
                     }
-                    else if (lecture[i].ProfessorName.Length > 4)
+                    else if (lecture[i-1].ProfessorName.Length > 4)
                     {
-                        Console.Write("{0,-14}\t", lecture[i].ProfessorName);
+                        Console.Write("{0,-12}\t", lecture[i-1].ProfessorName);
                     }
                     else
-                        Console.Write("{0,-16}", lecture[i].ProfessorName);
+                        Console.Write("{0,-16}", lecture[i-1].ProfessorName);
                 }
-                if (lecture[i].LectureLanguage != null) // 강의 언어
-                    Console.Write("{0,-4}", lecture[i].LectureLanguage);
+                if (lecture[i-1].LectureLanguage != null) // 강의 언어
+                    Console.Write("{0,-4}", lecture[i-1].LectureLanguage);
                 #endregion
-                //lecture[i].insertTimeSheet();
+                //lecture[i-1].insertTimeSheet();
 
                 Console.WriteLine("\r");
             }
@@ -369,7 +369,7 @@ namespace schedule
                 for (int i = 1; i <= rowCount; i++)
                 {
 
-                    if ((excelRange.Cells[i, 3].Value2.ToString() == subjectNumber) && (excelRange.Cells[i, 4].Value2.ToString() == subjectclass))
+                    if ((excelRange.Cells[i, 3].Value2.ToString.Equal(subjectNumber)) && (excelRange.Cells[i, 4].Value2.ToString.Equal(subjectclass)))
                     {
                         check++;
                         for (int j = 1; j < colCount; j++)
