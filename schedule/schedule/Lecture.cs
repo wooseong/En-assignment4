@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Threading;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace schedule
 {
@@ -73,8 +72,15 @@ namespace schedule
             Marshal.ReleaseComObject(excelApplication);
         }
 
-        public void LectureSet()
+        public void LectureSet() // 강의를 엑셀로부터 불러와서 초기화하기
         {
+            string temporarily;
+            string nameTemporarily;
+            string week = "";
+            string time = "";
+            string lectureRoom;// 강의실 10
+            string professorName; // 교수명 11
+
             for (int i = 2; i <= rowCount; i++)
             {
                 if ((excelRange.Cells[i, 1] != null && excelRange.Cells[i, 1].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
@@ -86,8 +92,32 @@ namespace schedule
                     && (excelRange.Cells[i, 7] != null && excelRange.Cells[i, 7].Value2 != null)
                     && (excelRange.Cells[i, 8] != null && excelRange.Cells[i, 8].Value2 != null)
                     && (excelRange.Cells[i, 9] != null && excelRange.Cells[i, 9].Value2 != null)
-                    && (excelRange.Cells[i, 10] != null && excelRange.Cells[i, 10].Value2 != null)
-                    && (excelRange.Cells[i, 11] != null && excelRange.Cells[i, 11].Value2 != null))
+                    && (excelRange.Cells[i, 12] != null && excelRange.Cells[i, 12].Value2 != null))
+                {
+                    nameTemporarily = excelRange.Cells[i, 5].Value2.ToString(); // private string lectureName; // 교과목명 5
+                    temporarily = excelRange.Cells[i, 9].Value2.ToString(); //  private string date;// 전체시간 9 잠시 담아두기
+                    if (excelRange.Cells[i, 10] == null && excelRange.Cells[i, 10].Value2 == null) lectureRoom = "";
+                    else lectureRoom = excelRange.Cells[i, 10].Value2.ToString(); // private string lectureRoom;// 강의실 12 (엑셀기준 10)
+                    if (excelRange.Cells[i, 11] == null && excelRange.Cells[i, 11].Value2 == null) professorName = "";
+                    else professorName = excelRange.Cells[i, 11].Value2.ToString(); // private string professorName; // 교수명 13(엑셀기준 11)
+                    for (int k = 0; k < temporarily.Length; k++)
+                    {
+                        switch (temporarily[k]) //화목13:30-15:00,화18:00-20:00 이런거 나누기
+                        {
+                            case '월':
+                            case '화':
+                            case '수':
+                            case '목':
+                            case '금':
+                                week = week + temporarily[k];
+                                break;
+                            default:
+                                time = time + temporarily[k];
+                                break;
+                        }
+                    }
+                    //if (nameTemporarily.Length < 10)
+                    //    nameTemporarily = nameTemporarily + "          ";
 
                     /*public LectureVO(int number, string department, string lectureNumber,
                     string lectureClassNumber, string lectureName, string completeDivision,
@@ -95,9 +125,12 @@ namespace schedule
                     string professorName, string lectureLanguage)*/
 
                     lecture.Add(new LectureVO(Int32.Parse(excelRange.Cells[i, 1].Value2.ToString()), excelRange.Cells[i, 2].Value2.ToString(), excelRange.Cells[i, 3].Value2.ToString(),
-                         excelRange.Cells[i, 4].Value2.ToString(), excelRange.Cells[i, 5].Value2.ToString(), excelRange.Cells[i, 6].Value2.ToString(),
-                          Int32.Parse(excelRange.Cells[i, 7].Value2.ToString()), excelRange.Cells[i, 8].Value2.ToDouble(), excelRange.Cells[i, 9].Value2.ToString(),
-                           excelRange.Cells[i, 10].Value2.ToString(), excelRange.Cells[i, 11].Value2.ToString() ) );
+                     excelRange.Cells[i, 4].Value2.ToString(), nameTemporarily, excelRange.Cells[i, 6].Value2.ToString(),
+                      Int32.Parse(excelRange.Cells[i, 7].Value2.ToString()), Double.Parse(excelRange.Cells[i, 8].Value2.ToString()), temporarily, time, week, lectureRoom,
+                       professorName, excelRange.Cells[i, 12].Value2.ToString()));
+                    week = "";
+                    time = "";
+                }
             }
         }
 
@@ -189,50 +222,53 @@ namespace schedule
         }
         public void SearchLecturePrint()
         {
-            LectureSet();
-            for (int i = 1; i <= rowCount; i++)
+            //LectureSet();
+            for (int i = 0; i < lecture.Count; i++)
             {
                 if ((i != 1) && (searchWithNumber != 0) && (excelRange.Cells[i, searchWithNumber].Value2.ToString() != searchWitinformation))
                     continue;
 
                 check++;
+                #region 강의출력 출력문
+                if (lecture[i].Number != -1) // 각 행의 NO
+                    Console.Write("{0,-4}", lecture[i].Number);
 
+                if (lecture[i].Department != null) // 개설학과
+                    Console.Write("{0,-16}\t", lecture[i].Department);
 
+                if (lecture[i].LectureNumber != null) // 학수번호
+                    Console.Write("{0,-10}", lecture[i].LectureNumber);
 
-                if (excelRange.Cells[i, 1] != null && excelRange.Cells[i, 1].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
-                    Console.Write("{0,-5},[{1}]", excelRange.Cells[i, 1].Value2.ToString(), excelRange.Cells[i, 1].Value2.ToString().Length);
-                if (excelRange.Cells[i, 2] != null && excelRange.Cells[i, 2].Value2 != null)
-                    Console.Write("{0,-16},[{1}]", excelRange.Cells[i, 2].Value2.ToString(), excelRange.Cells[i, 2].Value2.ToString().Length);
-                if (excelRange.Cells[i, 3] != null && excelRange.Cells[i, 3].Value2 != null)
-                    Console.Write("{0,-10},[{1}]", excelRange.Cells[i, 3].Value2.ToString(), excelRange.Cells[i, 3].Value2.ToString().Length);
-                if (excelRange.Cells[i, 4] != null && excelRange.Cells[i, 4].Value2 != null)
-                    Console.Write("{0,-5},[{1}]", excelRange.Cells[i, 4].Value2.ToString(), excelRange.Cells[i, 4].Value2.ToString().Length);
-                if (excelRange.Cells[i, 5] != null && excelRange.Cells[i, 5].Value2 != null)
-                    Console.Write("{0,-32}", excelRange.Cells[i, 5].Value2.ToString());
-                if (excelRange.Cells[i, 6] != null && excelRange.Cells[i, 6].Value2 != null)
-                    Console.Write("{0,-10}", excelRange.Cells[i, 6].Value2.ToString());
-                if (excelRange.Cells[i, 7] != null && excelRange.Cells[i, 7].Value2 != null)
-                    Console.Write("{0,-3}", excelRange.Cells[i, 7].Value2.ToString());
-                if (excelRange.Cells[i, 8] != null && excelRange.Cells[i, 8].Value2 != null)
-                    Console.Write("{0,-5}", excelRange.Cells[i, 8].Value2.ToString());
-                if (excelRange.Cells[i, 9] != null && excelRange.Cells[i, 9].Value2 != null)
-                    Console.Write("{0,-20}", excelRange.Cells[i, 9].Value2.ToString());
-                if (excelRange.Cells[i, 10] != null && excelRange.Cells[i, 10].Value2 != null)
-                    Console.Write("{0,-20}", excelRange.Cells[i, 10].Value2.ToString());
-                if (excelRange.Cells[i, 11] != null && excelRange.Cells[i, 11].Value2 != null)
-                    Console.Write("{0,-20}", excelRange.Cells[i, 11].Value2.ToString());
+                if (lecture[i].LectureClassNumber != null) // 분반
+                    Console.Write("{0,-5}", lecture[i].LectureClassNumber);
 
+                if (lecture[i].LectureName != null) // 교과목명
+                    Console.Write("{0,-16}\t\t", lecture[i].LectureName);
 
-                //for (int j = 1; j <= colCount; j++)
-                //{
-                //    if (excelRange.Cells[i, j] != null && excelRange.Cells[i, j].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
-                //        Console.Write("{0,}", excelRange.Cells[i, j].Value2.ToString());
-                //    //Console.Write(excelRange.Cells[i, j].Value2.ToString() + "\t ");
-                //    check++;
+                if (lecture[i].CompleteDivision != null) // 이수구분
+                    Console.Write("{0,-8}", lecture[i].CompleteDivision);
 
-                //}
+                if (lecture[i].Grade != -1) // 학년
+                    Console.Write("{0,-2}", lecture[i].Grade);
+
+                if (lecture[i].Credit != -1) // 학점
+                    Console.Write("{0,-2}", lecture[i].Credit);
+
+                if (lecture[i].Date != null) //요일 및 강의시간
+                    Console.Write("{0,-15}\t", lecture[i].Date);
+
+                if (lecture[i].LectureRoom != null) // 강의실
+                    Console.Write("{0,-8}\t", lecture[i].LectureRoom);
+
+                if (lecture[i].ProfessorName != null) // 교수명
+                    Console.Write("{0,-18}", lecture[i].ProfessorName);
+
+                if (lecture[i].LectureLanguage != null) // 강의 언어
+                    Console.Write("{0,-20}", lecture[i].LectureLanguage);
+                #endregion
+                //lecture[i].insertTimeSheet();
+
                 Console.WriteLine("\r");
-
             }
             if (check != 0)
                 Console.ReadLine();
@@ -270,16 +306,16 @@ namespace schedule
                     Console.Write("그런 수업은 없습니다.");
                     Thread.Sleep(1000);
                 }
-                //else
-                //{
-                //    for (int j = 0; j < colCount; j++)
-                //    {
-                //        Console.Write("{0,10}", selectLecture[j]);
+                else
+                {
+                    for (int j = 0; j < colCount; j++)
+                    {
+                        Console.Write("{0,10}", selectLecture[j]);
 
-                //    }
-                //   // Console.WriteLine(selectLecture);
-                //    Console.ReadLine();
-                //}
+                    }
+                    Console.WriteLine(selectLecture);
+                    Console.ReadLine();
+                }
             } while (check == 0);
             return selectLecture;
         }
@@ -328,3 +364,51 @@ namespace schedule
         }
     }
 }
+/*public void ReadExcelData(string path)
+{ // path는 Excel파일의 전체 경로입니다.
+  // 예. D:\test\test.xslx
+    Excel.Application excelApp = null;
+    Excel.Workbook wb = null;
+    Excel.Worksheet ws = null;
+    try
+    {
+        excelApp = new Excel.Application();
+        wb = excelApp.Workbooks.Open(path);
+        // path 대신 문자열도 가능합니다
+        // 예. Open(@"D:\test\test.xslx");
+        ws = wb.Worksheets.get_Item(1) as Excel.Worksheet;
+        // 첫번째 Worksheet를 선택합니다.
+        Excel.Range rng = ws.UsedRange;   // '여기'
+        // 현재 Worksheet에서 사용된 셀 전체를 선택합니다.
+        object[,] data = rng.Value;
+        // 열들에 들어있는 Data를 배열 (One-based array)로 받아옵니다.
+        for (int r = 1, i = 0; r <= data.GetLength(0); r++)
+        {
+            for (int c = 1; c <= data.GetLength(1); c++)
+            {
+                if (data[r, c] == null)
+                {
+                    continue;
+                }
+                // Data 빼오기
+                // data[r, c] 는 excel의 (r, c) 셀 입니다.
+                // data.GetLength(0)은 엑셀에서 사용되는 행의 수를 가져오는 것이고,
+                // data.GetLength(1)은 엑셀에서 사용되는 열의 수를 가져오는 것입니다.
+                // GetLength와 [ r, c] 의 순서를 바꿔서 사용할 수 있습니다.
+            }
+        }
+        wb.Close(true);
+        excelApp.Quit();
+    }
+    catch (Exception ex)
+    {
+        throw ex;
+    }
+    finally
+    {
+        ReleaseExcelObject(ws);
+        ReleaseExcelObject(wb);
+        ReleaseExcelObject(excelApp);
+    }
+}
+*/

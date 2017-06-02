@@ -15,11 +15,12 @@ namespace schedule
 
         public bool ShowMenu()
         {
+            Lecture.LectureSet();
             #region 메뉴 출력문
             Console.Clear();
             Console.WriteLine("\n\n-----------------------------------------------------------------------------------------Main Menu-----------------------------------------------------------------------------------------");
             Console.WriteLine("\n\n\n");
-            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 1.강의 출력"); // 엑셀 -> 콜솔로 출력
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 1.강의 출력"); // 엑셀 -> 콘솔로 출력
             Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 2.수강 신청"); // 엑셀에 추가
             Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 3.수강 철회");
             Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 4.관심 과목 출력");
