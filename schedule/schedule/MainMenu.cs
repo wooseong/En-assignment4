@@ -46,10 +46,12 @@ namespace schedule
                 }
                 else if (menuNumber.Equals("3"))// 수강 철회
                 {
-                    Lecture.ErasureLecture(2);
+                    Lecture.ErasureLecture(3);
                 }
                 else if (menuNumber.Equals("4"))// 관심 과목 출력
                 {
+                    Lecture.PrintSelectLectureList(4);
+                    Console.ReadLine();
                 }
                 else if (menuNumber.Equals("5"))// 관심 과목 추가
                 {
@@ -57,7 +59,7 @@ namespace schedule
                 }
                 else if (menuNumber.Equals("6"))// 관심 과목 삭제
                 {
-                    Lecture.ErasureLecture(5);
+                    Lecture.ErasureLecture(6);
                 }
                 else if (menuNumber.Equals("7"))// 시간표 출력
                 {
