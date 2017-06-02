@@ -56,7 +56,6 @@ namespace schedule
         public void AddTimeSheet(List<string> selected)
         {
             int[] x = new int[2];
-               int y;
             int j = 0;
             for(int i = 0; i < selected[9].Length; i++)
             {

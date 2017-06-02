@@ -20,7 +20,7 @@ namespace schedule
         int rowCount; // 시간표 행 개수
         int colCount; // 시간표 열 개수
         private string searchWithNumberString; // SearchLecturePrintWith의 메뉴 번호 선택 변수
-        private int searchWithNumber; // SearchLecturePrintWith의 메뉴 번호에 따른 엑셀 열 번호
+        private int searchWithNumber; // SearchLecturePrintWith의 메뉴 번호에 따른 엑셀 열 번호 단, 0이면 전체 출력
         private string searchWitinformation; //  SearchLecturePrintWith의 새부 검색 내용 변수
         private int check; //새부 검색 내용이 출력 되었는지 확인
         List<LectureVO> lecture = new List<LectureVO>();
@@ -28,7 +28,7 @@ namespace schedule
         private string subjectNumber;
         private string subjectclass;
 
-        List<string> selectLecture = new List<string>(new string[] { "", }); //
+        List<string> selectLecture = new List<string>(new string[] { "", });
         List<string> selectIntrestLecture = new List<string>(new string[] { "", });
         List<string> searchWithList = new List<string>(new string[]
         {"뒤로가기",
@@ -41,7 +41,7 @@ namespace schedule
         "교수명",
         "강의언어",
         "전체"
-        });
+        }); // 세부 목록 검색 무엇을 할지 목록
         #endregion
 
         public Lecture(string directory)// 엑셀 불러오고 각 변수에 초기화
@@ -75,62 +75,126 @@ namespace schedule
         public void LectureSet() // 강의를 엑셀로부터 불러와서 초기화하기
         {
             string temporarily;
-            string nameTemporarily;
+            //string nameTemporarily;
             string week = "";
             string time = "";
-            string lectureRoom;// 강의실 10
-            string professorName; // 교수명 11
+            string lectureRoom = "";// 강의실 10
+            string professorName = ""; // 교수명 11
+            List<string> temporarilyList = new List<string>();
 
-            for (int i = 2; i <= rowCount; i++)
+            for (int i = 2; i <= rowCount; i++)// 엑셀 행 돌리기
             {
-                if ((excelRange.Cells[i, 1] != null && excelRange.Cells[i, 1].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
-                    && (excelRange.Cells[i, 2] != null && excelRange.Cells[i, 2].Value2 != null)
-                    && (excelRange.Cells[i, 3] != null && excelRange.Cells[i, 3].Value2 != null)
-                    && (excelRange.Cells[i, 4] != null && excelRange.Cells[i, 4].Value2 != null)
-                    && (excelRange.Cells[i, 5] != null && excelRange.Cells[i, 5].Value2 != null)
-                    && (excelRange.Cells[i, 6] != null && excelRange.Cells[i, 6].Value2 != null)
-                    && (excelRange.Cells[i, 7] != null && excelRange.Cells[i, 7].Value2 != null)
-                    && (excelRange.Cells[i, 8] != null && excelRange.Cells[i, 8].Value2 != null)
-                    && (excelRange.Cells[i, 9] != null && excelRange.Cells[i, 9].Value2 != null)
-                    && (excelRange.Cells[i, 12] != null && excelRange.Cells[i, 12].Value2 != null))
+                week = "";
+                time = "";
+                lectureRoom = "";
+                professorName = "";
+                temporarily = excelRange.Cells[i, 9].Value2.ToString();
+
+                for (int j = 1; j <= colCount; j++)// 엑셀 엘 돌리기
                 {
-                    nameTemporarily = excelRange.Cells[i, 5].Value2.ToString(); // private string lectureName; // 교과목명 5
-                    temporarily = excelRange.Cells[i, 9].Value2.ToString(); //  private string date;// 전체시간 9 잠시 담아두기
-                    if (excelRange.Cells[i, 10] == null && excelRange.Cells[i, 10].Value2 == null) lectureRoom = "";
-                    else lectureRoom = excelRange.Cells[i, 10].Value2.ToString(); // private string lectureRoom;// 강의실 12 (엑셀기준 10)
-                    if (excelRange.Cells[i, 11] == null && excelRange.Cells[i, 11].Value2 == null) professorName = "";
-                    else professorName = excelRange.Cells[i, 11].Value2.ToString(); // private string professorName; // 교수명 13(엑셀기준 11)
-                    for (int k = 0; k < temporarily.Length; k++)
+                    if (excelRange.Cells[i, j] != null && excelRange.Cells[i, j].Value2 != null)
                     {
-                        switch (temporarily[k]) //화목13:30-15:00,화18:00-20:00 이런거 나누기
+                        switch (j)// 열 번호에 따라 정하기 전에 조건 절차를 위하 나누기
                         {
-                            case '월':
-                            case '화':
-                            case '수':
-                            case '목':
-                            case '금':
-                                week = week + temporarily[k];
+
+                            case 9: // 엑셀에서 열 기준으로 9번째인 요일 및 강의 시간
+                                for (int k = 0; k < temporarily.Length; k++)
+                                {
+                                    switch (temporarily[k]) //화목13:30-15:00,화18:00-20:00 이런거 나누기
+                                    {
+                                        case '월':
+                                        case '화':
+                                        case '수':
+                                        case '목':
+                                        case '금':
+                                            week = week + temporarily[k];
+                                            break;
+                                        default:
+                                            time = time + temporarily[k];
+                                            break;
+                                    }
+                                }
                                 break;
-                            default:
-                                time = time + temporarily[k];
+                            case 10: // 10번째 강의실
+                                if (excelRange.Cells[i, 10].Value2.ToString().ToString().Length < 2)
+                                {
+                                    lectureRoom = "\t\t";
+                                }
+                                else
+                                    lectureRoom = excelRange.Cells[i, 10].Value2.ToString();
+                                break;
+                            case 11: // 11번째 교수명
+                                if (excelRange.Cells[i, 11].Value2.ToString() == null)
+                                {
+                                    professorName = "\t\t";
+                                }
+                                else
+                                    professorName = excelRange.Cells[i, 11].Value2.ToString();
+                                break;
+                            default: // 특별한 경우 없이 string 으로 넣어도 되는 나머지
+                                temporarilyList.Add(excelRange.Cells[i, j].Value2.ToString());
                                 break;
                         }
                     }
-                    //if (nameTemporarily.Length < 10)
-                    //    nameTemporarily = nameTemporarily + "          ";
-
-                    /*public LectureVO(int number, string department, string lectureNumber,
-                    string lectureClassNumber, string lectureName, string completeDivision,
-                    int grade, double credit, string[] dateTime, string[] lectureRoom,
-                    string professorName, string lectureLanguage)*/
-
-                    lecture.Add(new LectureVO(Int32.Parse(excelRange.Cells[i, 1].Value2.ToString()), excelRange.Cells[i, 2].Value2.ToString(), excelRange.Cells[i, 3].Value2.ToString(),
-                     excelRange.Cells[i, 4].Value2.ToString(), nameTemporarily, excelRange.Cells[i, 6].Value2.ToString(),
-                      Int32.Parse(excelRange.Cells[i, 7].Value2.ToString()), Double.Parse(excelRange.Cells[i, 8].Value2.ToString()), temporarily, time, week, lectureRoom,
-                       professorName, excelRange.Cells[i, 12].Value2.ToString()));
-                    week = "";
-                    time = "";
                 }
+                lecture.Add(new LectureVO(Int32.Parse(temporarilyList[0]), temporarilyList[1], temporarilyList[2],
+                     temporarilyList[3], temporarilyList[4], temporarilyList[5],
+                      Int32.Parse(temporarilyList[6]), Double.Parse(temporarilyList[7]), temporarily, time, week, lectureRoom,
+                       professorName, temporarilyList[8]));
+                temporarilyList.Clear(); // 재사용을 위한 삭제
+                #region 처음에 해본 방법
+                /* if ((excelRange.Cells[i, 1] != null && excelRange.Cells[i, 1].Value2 != null) // 메뉴 번호에 따른 세부내용 확인
+                     && (excelRange.Cells[i, 2] != null && excelRange.Cells[i, 2].Value2 != null)
+                     && (excelRange.Cells[i, 3] != null && excelRange.Cells[i, 3].Value2 != null)
+                     && (excelRange.Cells[i, 4] != null && excelRange.Cells[i, 4].Value2 != null)
+                     && (excelRange.Cells[i, 5] != null && excelRange.Cells[i, 5].Value2 != null)
+                     && (excelRange.Cells[i, 6] != null && excelRange.Cells[i, 6].Value2 != null)
+                     && (excelRange.Cells[i, 7] != null && excelRange.Cells[i, 7].Value2 != null)
+                     && (excelRange.Cells[i, 8] != null && excelRange.Cells[i, 8].Value2 != null)
+                     && (excelRange.Cells[i, 9] != null && excelRange.Cells[i, 9].Value2 != null)
+                     && (excelRange.Cells[i, 12] != null && excelRange.Cells[i, 12].Value2 != null))
+                 {
+                     nameTemporarily = excelRange.Cells[i, 5].Value2.ToString(); // private string lectureName; // 교과목명 5
+                     temporarily = excelRange.Cells[i, 9].Value2.ToString(); //  private string date;// 전체시간 9 잠시 담아두기
+                     if (excelRange.Cells[i, 10].Value2.ToString() != "") lectureRoom = excelRange.Cells[i, 10].Value2.ToString(); // private string lectureRoom;// 강의실 12 (엑셀기준 10)
+                     else lectureRoom = "\t\t";
+
+                     if (excelRange.Cells[i, 11].Value.ToString() != null) professorName = excelRange.Cells[i, 11].Value2.ToString(); // private string professorName; // 교수명 13(엑셀기준 11)
+
+                     else professorName = "\t\t";
+
+                     for (int k = 0; k < temporarily.Length; k++)
+                     {
+                         switch (temporarily[k]) //화목13:30-15:00,화18:00-20:00 이런거 나누기
+                         {
+                             case '월':
+                             case '화':
+                             case '수':
+                             case '목':
+                             case '금':
+                                 week = week + temporarily[k];
+                                 break;
+                             default:
+                                 time = time + temporarily[k];
+                                 break;
+                         }
+                     }
+                     //if (nameTemporarily.Length < 10)
+                     //    nameTemporarily = nameTemporarily + "          ";
+
+                     /*public LectureVO(int number, string department, string lectureNumber,
+                     string lectureClassNumber, string lectureName, string completeDivision,
+                     int grade, double credit, string[] dateTime, string[] lectureRoom,
+                     string professorName, string lectureLanguage)
+
+                     lecture.Add(new LectureVO(Int32.Parse(excelRange.Cells[i, 1].Value2.ToString()), excelRange.Cells[i, 2].Value2.ToString(), excelRange.Cells[i, 3].Value2.ToString(),
+                      excelRange.Cells[i, 4].Value2.ToString(), nameTemporarily, excelRange.Cells[i, 6].Value2.ToString(),
+                       Int32.Parse(excelRange.Cells[i, 7].Value2.ToString()), Double.Parse(excelRange.Cells[i, 8].Value2.ToString()), temporarily, time, week, lectureRoom,
+                        professorName, excelRange.Cells[i, 12].Value2.ToString()));
+                     week = "";
+                     time = "";
+                 }*/
+                #endregion
             }
         }
 
@@ -153,6 +217,7 @@ namespace schedule
             {
                 searchWithNumber = 0;
                 SearchLecturePrint();
+                return true; // (정상처리인지 확인용)
             }
 
             check = -1; // do while문이 처음인지 위해 -1로 마음대로 의미지정
@@ -218,59 +283,77 @@ namespace schedule
                 }
                 #endregion
             } while (check == 0);
-            return true; // 무의미한 리턴
+            return true; // (정상처리인지 확인용)
         }
-        public void SearchLecturePrint()
+        public void SearchLecturePrint() // 강의 출력
         {
-            //LectureSet();
             for (int i = 0; i < lecture.Count; i++)
             {
                 if ((i != 1) && (searchWithNumber != 0) && (excelRange.Cells[i, searchWithNumber].Value2.ToString() != searchWitinformation))
                     continue;
 
-                check++;
+                check++; // 검색된 강의가 있는지 확인
                 #region 강의출력 출력문
                 if (lecture[i].Number != -1) // 각 행의 NO
-                    Console.Write("{0,-4}", lecture[i].Number);
-
+                    Console.Write("{0,-5}", lecture[i].Number);
                 if (lecture[i].Department != null) // 개설학과
-                    Console.Write("{0,-16}\t", lecture[i].Department);
-
+                    Console.Write("{0,-10}\t", lecture[i].Department);
                 if (lecture[i].LectureNumber != null) // 학수번호
                     Console.Write("{0,-10}", lecture[i].LectureNumber);
-
                 if (lecture[i].LectureClassNumber != null) // 분반
                     Console.Write("{0,-5}", lecture[i].LectureClassNumber);
-
-                if (lecture[i].LectureName != null) // 교과목명
-                    Console.Write("{0,-16}\t\t", lecture[i].LectureName);
-
+                if (lecture[i].LectureName != null)// 교과목명
+                {
+                    if (lecture[i].LectureName.Length > 20)
+                        Console.Write("{0,-16}\t\t", lecture[i].LectureName);
+                    else
+                        Console.Write("{0,-14}\t\t\t", lecture[i].LectureName);
+                }// 교과목명
                 if (lecture[i].CompleteDivision != null) // 이수구분
                     Console.Write("{0,-8}", lecture[i].CompleteDivision);
-
                 if (lecture[i].Grade != -1) // 학년
                     Console.Write("{0,-2}", lecture[i].Grade);
-
                 if (lecture[i].Credit != -1) // 학점
                     Console.Write("{0,-2}", lecture[i].Credit);
-
                 if (lecture[i].Date != null) //요일 및 강의시간
-                    Console.Write("{0,-15}\t", lecture[i].Date);
-
+                {
+                    if (lecture[i].Date.Length < 14)
+                    {
+                        Console.Write("{0,-15}\t\t", lecture[i].Date);
+                    }
+                    else
+                    {
+                        Console.Write("{0,-15}\t", lecture[i].Date);
+                    }
+                } //요일 및 강의시간
                 if (lecture[i].LectureRoom != null) // 강의실
                     Console.Write("{0,-8}\t", lecture[i].LectureRoom);
 
-                if (lecture[i].ProfessorName != null) // 교수명
-                    Console.Write("{0,-18}", lecture[i].ProfessorName);
-
+                if (lecture[i].ProfessorName != null)
+                { // 교수명
+                    if (lecture[i].ProfessorName.Length < 1)
+                    {
+                        Console.Write("{0,-18}\t", lecture[i].ProfessorName);
+                    }
+                    else if (lecture[i].ProfessorName.Length < 3)
+                    {
+                        Console.Write("{0,-16}\t", lecture[i].ProfessorName);
+                    }
+                    else if (lecture[i].ProfessorName.Length > 4)
+                    {
+                        Console.Write("{0,-14}\t", lecture[i].ProfessorName);
+                    }
+                    else
+                        Console.Write("{0,-16}", lecture[i].ProfessorName);
+                }
                 if (lecture[i].LectureLanguage != null) // 강의 언어
-                    Console.Write("{0,-20}", lecture[i].LectureLanguage);
+                    Console.Write("{0,-4}", lecture[i].LectureLanguage);
                 #endregion
                 //lecture[i].insertTimeSheet();
 
                 Console.WriteLine("\r");
             }
-            if (check != 0)
+            if (check != 0) // 검색된 강의가 있다면 0이 아니므로
                 Console.ReadLine();
         }
         public List<string> AddLecture(int menuNumber)
@@ -298,7 +381,6 @@ namespace schedule
                         }
                         Console.Write("정상적으로 추가되셨습니다.");
                         Console.ReadLine();
-
                     }
                 }
                 if (check == 0)
