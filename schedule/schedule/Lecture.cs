@@ -23,10 +23,13 @@ namespace schedule
         private int searchWithNumber; // SearchLecturePrintWith의 메뉴 번호에 따른 엑셀 열 번호 단, 0이면 전체 출력
         private string searchWitinformation; //  SearchLecturePrintWith의 새부 검색 내용 변수
         private int check; //새부 검색 내용이 출력 되었는지 확인
-        List<LectureVO> lecture = new List<LectureVO>();
+        List<LectureVO> lecture = new List<LectureVO>(); // 엑셀로 부터 강의 모두 받아온 list
 
-        private string subjectNumber;
-        private string subjectclass;
+        private string subjectNumber;// 수강 신청 학수번호
+        private string subjectclass;// 수강 신청 분반
+
+        private int mainMenuNumber;//출력 후 2: 수강신청, 5: 관심과목 담기, 0: 뒤로
+
 
         List<string> selectLecture = new List<string>(new string[] { "", });
         List<string> selectIntrestLecture = new List<string>(new string[] { "", });
@@ -283,6 +286,13 @@ namespace schedule
                 }
                 #endregion
             } while (check == 0);
+
+            //#region
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 2.수강 신청"); // 엑셀에 추가
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 5.관심 과목 추가");
+            Console.WriteLine("\t\t\t\t\t\t\t\t\t\t\t 0. exit");
+           // mainMenuNumber 
+
             return true; // (정상처리인지 확인용)
         }
         public void SearchLecturePrint() // 강의 출력
@@ -294,60 +304,60 @@ namespace schedule
 
                 check++; // 검색된 강의가 있는지 확인
                 #region 강의출력 출력문
-                if (lecture[i-1].Number != -1) // 각 행의 NO
-                    Console.Write("{0,-5}", lecture[i-1].Number);
-                if (lecture[i-1].Department != null) // 개설학과
-                    Console.Write("{0,-10}\t", lecture[i-1].Department);
-                if (lecture[i-1].LectureNumber != null) // 학수번호
-                    Console.Write("{0,-10}", lecture[i-1].LectureNumber);
-                if (lecture[i-1].LectureClassNumber != null) // 분반
-                    Console.Write("{0,-5}", lecture[i-1].LectureClassNumber);
-                if (lecture[i-1].LectureName != null)// 교과목명
+                if (lecture[i - 1].Number != -1) // 각 행의 NO
+                    Console.Write("{0,-5}", lecture[i - 1].Number);
+                if (lecture[i - 1].Department != null) // 개설학과
+                    Console.Write("{0,-10}\t", lecture[i - 1].Department);
+                if (lecture[i - 1].LectureNumber != null) // 학수번호
+                    Console.Write("{0,-10}", lecture[i - 1].LectureNumber);
+                if (lecture[i - 1].LectureClassNumber != null) // 분반
+                    Console.Write("{0,-5}", lecture[i - 1].LectureClassNumber);
+                if (lecture[i - 1].LectureName != null)// 교과목명
                 {
-                    if (lecture[i-1].LectureName.Length > 20)
-                        Console.Write("{0,-16}\t\t", lecture[i-1].LectureName);
+                    if (lecture[i - 1].LectureName.Length > 20)
+                        Console.Write("{0,-16}\t\t", lecture[i - 1].LectureName);
                     else
-                        Console.Write("{0,-14}\t\t\t", lecture[i-1].LectureName);
+                        Console.Write("{0,-14}\t\t\t", lecture[i - 1].LectureName);
                 }// 교과목명
-                if (lecture[i-1].CompleteDivision != null) // 이수구분
-                    Console.Write("{0,-8}", lecture[i-1].CompleteDivision);
-                if (lecture[i-1].Grade != -1) // 학년
-                    Console.Write("{0,-2}", lecture[i-1].Grade);
-                if (lecture[i-1].Credit != -1) // 학점
-                    Console.Write("{0,-2}", lecture[i-1].Credit);
-                if (lecture[i-1].Date != null) //요일 및 강의시간
+                if (lecture[i - 1].CompleteDivision != null) // 이수구분
+                    Console.Write("{0,-8}", lecture[i - 1].CompleteDivision);
+                if (lecture[i - 1].Grade != -1) // 학년
+                    Console.Write("{0,-2}", lecture[i - 1].Grade);
+                if (lecture[i - 1].Credit != -1) // 학점
+                    Console.Write("{0,-2}", lecture[i - 1].Credit);
+                if (lecture[i - 1].Date != null) //요일 및 강의시간
                 {
-                    if (lecture[i-1].Date.Length < 14)
+                    if (lecture[i - 1].Date.Length < 14)
                     {
-                        Console.Write("{0,-15}\t\t", lecture[i-1].Date);
+                        Console.Write("{0,-15}\t\t", lecture[i - 1].Date);
                     }
                     else
                     {
-                        Console.Write("{0,-15}\t", lecture[i-1].Date);
+                        Console.Write("{0,-15}\t", lecture[i - 1].Date);
                     }
                 } //요일 및 강의시간
-                if (lecture[i-1].LectureRoom != null) // 강의실
-                    Console.Write("{0,-8}\t", lecture[i-1].LectureRoom);
+                if (lecture[i - 1].LectureRoom != null) // 강의실
+                    Console.Write("{0,-8}\t", lecture[i - 1].LectureRoom);
 
-                if (lecture[i-1].ProfessorName != null)
+                if (lecture[i - 1].ProfessorName != null)
                 { // 교수명
-                    if (lecture[i-1].ProfessorName.Length < 1)
+                    if (lecture[i - 1].ProfessorName.Length < 1)
                     {
-                        Console.Write("{0,-13}\t", lecture[i-1].ProfessorName);
+                        Console.Write("{0,-13}\t", lecture[i - 1].ProfessorName);
                     }
-                    else if (lecture[i-1].ProfessorName.Length < 3)
+                    else if (lecture[i - 1].ProfessorName.Length < 3)
                     {
-                        Console.Write("{0,-14}\t", lecture[i-1].ProfessorName);
+                        Console.Write("{0,-14}\t", lecture[i - 1].ProfessorName);
                     }
-                    else if (lecture[i-1].ProfessorName.Length > 4)
+                    else if (lecture[i - 1].ProfessorName.Length > 4)
                     {
-                        Console.Write("{0,-12}\t", lecture[i-1].ProfessorName);
+                        Console.Write("{0,-12}\t", lecture[i - 1].ProfessorName);
                     }
                     else
-                        Console.Write("{0,-16}", lecture[i-1].ProfessorName);
+                        Console.Write("{0,-16}", lecture[i - 1].ProfessorName);
                 }
-                if (lecture[i-1].LectureLanguage != null) // 강의 언어
-                    Console.Write("{0,-4}", lecture[i-1].LectureLanguage);
+                if (lecture[i - 1].LectureLanguage != null) // 강의 언어
+                    Console.Write("{0,-4}", lecture[i - 1].LectureLanguage);
                 #endregion
                 //lecture[i-1].insertTimeSheet();
 
@@ -356,7 +366,7 @@ namespace schedule
             if (check != 0) // 검색된 강의가 있다면 0이 아니므로
                 Console.ReadLine();
         }
-        public List<string> AddLecture(int menuNumber)
+        public List<string> AddLecture(int menuNumber) // menuNumber 2 : 수강신청, 5 : 관심과목 추가
         {
             do
             {
