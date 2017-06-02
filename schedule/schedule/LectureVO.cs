@@ -63,7 +63,7 @@ namespace schedule
 
         } // 생성자
 
-        public void insertTimeSheet()
+       /* public void insertTimeSheet()
         {
             int i = 0;
             string stemporarily;
@@ -88,7 +88,7 @@ namespace schedule
                  Console.WriteLine(temporarily[j]);
              }
 
-        }
+        }*/
         public void inserFavorit(LectureVO lecture) // 생성자가 
         {
             this.number = lecture.Number;

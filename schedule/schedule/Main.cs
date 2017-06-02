@@ -9,7 +9,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using schedule;
 
 namespace Sandbox
-{
+{   
     public class Read_From_Excel
     {
         public static void Main()
@@ -17,7 +17,7 @@ namespace Sandbox
             Console.SetWindowSize(190, 40); // 콘솔 창 사이즈 설정
             MainMenu mainMenu = new MainMenu(); // 메뉴 창 담고있는 변수
 
-            while (mainMenu.ShowMenu()) ; // 메뉴 무한 루프
+            mainMenu.ShowMenu(); // 메뉴 무한 루프
 
         }
     }
