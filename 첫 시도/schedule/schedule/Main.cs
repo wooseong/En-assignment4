@@ -16,7 +16,6 @@ namespace Sandbox
         {
             Console.SetWindowSize(190, 40); // 콘솔 창 사이즈 설정
             MainMenu mainMenu = new MainMenu(); // 메뉴 창 담고있는 변수
-
             mainMenu.ShowMenu(); // 메뉴 무한 루프
 
         }

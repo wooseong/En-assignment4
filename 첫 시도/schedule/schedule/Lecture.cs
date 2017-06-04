@@ -377,9 +377,9 @@ namespace schedule
         }
         public void AddLecture(int menuNumber) // menuNumber 2,22 : 수강신청, 5,55 : 관심과목 추가
         {
-            int ox = 0;
             do
             {
+                int ox = 0, ox1 = 0;
                 if (menuNumber != 22 && menuNumber != 55) Console.Clear();
                 Console.Write("\t수강 신청하실 과목의 학수번호와 분반 입력하세요.  \n\t학수 번호  :  ");
                 subjectNumber = Console.ReadLine();
@@ -398,11 +398,16 @@ namespace schedule
                         {
                             for (int j = 0; j < selectLecture.Count; j++)
                             {
-                                if ( !(selectLecture[j].LectureNumber != subjectNumber) && !(selectLecture[j].LectureClassNumber != subjectclass))
+                                if (!(selectLecture[j].LectureNumber != subjectNumber))
                                 {
                                     ox = 1;
+                                    Console.Write("같은 과목이 이미 존재합니다.");
                                     break;
                                 }
+/*                                else
+                                {
+                                    selectIntrestLecture[j].DateTime
+                                }*/
                             }
                             if (ox == 0)
                             {
@@ -417,13 +422,24 @@ namespace schedule
                         }
                         else if (menuNumber == 5 || menuNumber == 55)//관심과목담기
                         {
-                            maxIntrestCredit -= lecture[i - 2].Credit;
-                            selectIntrestLecture.Add(new LectureVO(lecture[i - 2].Number, lecture[i - 2].Department, lecture[i - 2].LectureNumber,
-                                lecture[i - 2].LectureClassNumber, lecture[i - 2].LectureName, lecture[i - 2].CompleteDivision,
-                                lecture[i - 2].Grade, lecture[i - 2].Credit, lecture[i - 2].Date, lecture[i - 2].DateTime, lecture[i - 2].DateWeek,
-                                lecture[i - 2].LectureRoom, lecture[i - 2].ProfessorName, lecture[i - 2].LectureLanguage));
-                            Console.Write("정상적으로 추가되셨습니다.");
-                            Console.Write("수강 가능한 남은 학점은 {0}학점", maxIntrestCredit);
+                            for (int j = 0; j < selectIntrestLecture.Count; j++)
+                            {
+                                if (!(selectIntrestLecture[j].LectureNumber != subjectNumber))
+                                {
+                                    ox = 1;
+                                    Console.Write("같은 과목이 이미 존재합니다.");
+                                }
+                            }
+                            if (ox == 0)
+                            {
+                                maxIntrestCredit -= lecture[i - 2].Credit;
+                                selectIntrestLecture.Add(new LectureVO(lecture[i - 2].Number, lecture[i - 2].Department, lecture[i - 2].LectureNumber,
+                                    lecture[i - 2].LectureClassNumber, lecture[i - 2].LectureName, lecture[i - 2].CompleteDivision,
+                                    lecture[i - 2].Grade, lecture[i - 2].Credit, lecture[i - 2].Date, lecture[i - 2].DateTime, lecture[i - 2].DateWeek,
+                                    lecture[i - 2].LectureRoom, lecture[i - 2].ProfessorName, lecture[i - 2].LectureLanguage));
+                                Console.Write("정상적으로 추가되셨습니다.");
+                                Console.Write("수강 가능한 남은 학점은 {0}학점", maxIntrestCredit);
+                            }
                         }
                         Console.ReadLine();
                         break;
@@ -639,7 +655,6 @@ namespace schedule
             }
         }// 관심과목 출력
 
-
         public void initTimeSheet()
         {
             string[] week = { "월      \t", "화      \t", "수      \t", "목      \t", "금      \t" };
@@ -670,82 +685,52 @@ namespace schedule
         public void printTimeSheet()
         {
 
-            int select;
-            int selWeek;
             string time = "";
-            string week = "";
-            select = Int32.Parse(Console.ReadLine()); //1이면 관심과목, 2이면 학수번호, 분반으로 추가
-            switch (select)
+
+
+            for (int i = 0; i < selectLecture.Count; i++)
             {
-                case 1:
-                    for (int i = 1; i <= selectIntrestLecture.Count; i++)
+                if (selectLecture[i].DateTime.Length < 12)
+                {
+                    time = selectLecture[i].DateTime.Substring(0, 5);
+                    for (int j = 0; j < selectLecture[i].DateWeek.Length; j++)
                     {
-                        for (int j = 1; j <= selectIntrestLecture[i].DateTime.Length; j++)
+                        switch (selectLecture[i].DateWeek[j])
                         {
-                            if (!selectIntrestLecture[i].DateTime[j].Equals('-'))
-                                time += selectIntrestLecture[i].DateTime[j];
-                            else
-                            {
-                                for (int k = 0; k < selectIntrestLecture[i].DateWeek.Length; k++)
-                                {
-                                    switch (selectIntrestLecture[i].DateWeek[k])
-                                    {
-                                        case '월':
-                                            TimeCase(i, time, 1);
-                                            break;
-                                        case '화':
-                                            TimeCase(i, time, 2);
-                                            break;
-                                        case '수':
-                                            TimeCase(i, time, 3);
-                                            break;
-                                        case '목':
-                                            TimeCase(i, time, 4);
-                                            break;
-                                        case '금':
-                                            TimeCase(i, time, 5);
-                                            break;
-                                    }
-                                }
-                                j++;
-                                time = "";
-                                time += selectIntrestLecture[i].DateTime[j];
-                            }
-                        }
-                        for (int k = 0; k < selectIntrestLecture[i].DateWeek.Length; k++)
-                        {
-                            switch (selectIntrestLecture[i].DateWeek[k])
-                            {
-                                case '월':
-                                    TimeCase(i, time, 1);
-                                    break;
-                                case '화':
-                                    TimeCase(i, time, 2);
-                                    break;
-                                case '수':
-                                    TimeCase(i, time, 3);
-                                    break;
-                                case '목':
-                                    TimeCase(i, time, 4);
-                                    break;
-                                case '금':
-                                    TimeCase(i, time, 5);
-                                    break;
-                            }
-                        }
+                            case '월':
+                                TimeCase(i, time, 1);
+                                break;
 
+                            case '화':
+                                TimeCase(i, time, 2);
+                                break;
+                            case '수':
+                                TimeCase(i, time, 3);
+                                break;
+                            case '목':
+                                TimeCase(i, time, 4);
+                                break;
+                            case '금':
+                                TimeCase(i, time, 5);
+                                break;
+                        }
                     }
-                    break;
-                case 2:
-
-                    break;
+                }
             }
-
-
+            for (int i = 0; i < sheet.Count; i++)
+            {
+                for (int j = 0; j < sheet[i].Count; j++)
+                {
+                    Console.Write(sheet[i][j] + "\t");
+                }
+                Console.WriteLine();
+            }
         }
+
         public void TimeCase(int i, string time, int selWeek)
         {
-            switch (time.Substring(0, 2))
+            Console.WriteLine(time);
+            switch (time)
             {
                 case "09:00":
                     sheet[1][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
@@ -757,26 +742,25 @@ namespace schedule
                     sheet[4][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
                     break;
                 case "12:00":
-                    sheet[17][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
+                    sheet[7][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
                     break;
                 case "13:30":
-                    sheet[20][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
+                    sheet[10][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
                     break;
                 case "14:00":
-                    sheet[21][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
+                    sheet[11][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
                     break;
                 case "15:00":
-                    sheet[23][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
+                    sheet[13][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
                     break;
                 case "16:00":
-                    sheet[25][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
+                    sheet[15][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
                     break;
                 case "18:00":
-                    sheet[29][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
+                    sheet[19][selWeek] = selectIntrestLecture[i].LectureName + " " + selectIntrestLecture[i].LectureRoom;
                     break;
 
             }
         }
-
     }
 }

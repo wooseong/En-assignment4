@@ -10,13 +10,15 @@ namespace schedule
     class MainMenu
     {
         Lecture Lecture = new Lecture(@"C:\Users\신우성\Desktop\excelStudy.xlsx"); // 엑셀 파일 위치
+        
         TimeSheet sheet = new TimeSheet();
         private string menuNumber;
 
         public void ShowMenu()
         {
             Lecture.LectureSet();
-            while(true)
+            Lecture.initTimeSheet();
+            while (true)
             {
                 #region 메뉴 출력문
                 Console.Clear();
